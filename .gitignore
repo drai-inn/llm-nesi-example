@@ -1,0 +1,4 @@
+.env
+litellm-db-data/
+open-webui-data/
+swag-data/
