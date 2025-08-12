@@ -1,0 +1,91 @@
+services:
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Pacific/Auckland
+      - URL=${SWAG_DOMAIN}
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - DNSPLUGIN=duckdns
+    volumes:
+      - ./swag-data:/config
+      - ./swag-proxy-configs/open-webui.subdomain.conf:/config/nginx/proxy-confs/open-webui.subdomain.conf:ro
+#      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
+    ports:
+      - 443:443
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - ./open-webui-data:/app/backend/data
+    environment:
+      - ENABLE_OLLAMA_API=False
+      - ENABLE_OPENAI_API=True
+      - ENABLE_SIGNUP=False
+      - ANONYMIZED_TELEMETRY=False
+      - DO_NOT_TRACK=True
+      - SCARF_NO_ANALYTICS=True
+      - WEBUI_URL=https://${OPEN_WEBUID_SUBDOMAIN}.${SWAG_DOMAIN}
+      - ENABLE_PERSISTENT_CONFIG=False
+      - ENABLE_FORWARD_USER_INFO_HEADERS=True
+      - GLOBAL_LOG_LEVEL=INFO
+      - OPENAI_API_BASE_URL=http://litellm:4000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
+
+  hostproxy:
+    image: qoomon/docker-host
+    container_name: hostproxy
+    cap_add:
+      - "NET_ADMIN"
+      - "NET_RAW"
+    mem_limit: 8M
+    environment:
+      - PORTS=7000,7001,7002
+    restart: unless-stopped
+
+  litellm:
+    image: litellm/litellm:v1.74.15-stable
+    container_name: litellm
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://llmproxy:${LITELLM_DB_PASSWORD}@litellm-db:5432/litellm
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
+      - UI_USERNAME=admin
+      - UI_PASSWORD=${LITELLM_UI_PASSWORD}
+      - STORE_MODELS_IN_DB=True
+      - HOST=0.0.0.0
+      - PORT=4000
+      - VLLM_API_KEY=${VLLM_API_KEY}
+    volumes:
+      - ./litellm-data/config.yaml:/app/config.yaml
+    command:
+      - "--config=/app/config.yaml"
+    depends_on:
+      - litellm-db
+
+  litellm-db:
+    image: postgres:latest
+    container_name: litellm-db
+    restart: always
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: llmproxy
+      POSTGRES_PASSWORD: ${LITELLM_DB_PASSWORD}
+    volumes:
+      - ./litellm-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
