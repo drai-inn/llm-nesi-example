@@ -15,7 +15,7 @@ services:
     volumes:
       - ./swag-data:/config
       - ./swag-proxy-configs/open-webui.subdomain.conf:/config/nginx/proxy-confs/open-webui.subdomain.conf:ro
-#      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
+      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
     ports:
       - 443:443
     restart: unless-stopped
@@ -32,7 +32,7 @@ services:
       - ANONYMIZED_TELEMETRY=False
       - DO_NOT_TRACK=True
       - SCARF_NO_ANALYTICS=True
-      - WEBUI_URL=https://${OPEN_WEBUID_SUBDOMAIN}.${SWAG_DOMAIN}
+      - WEBUI_URL=https://${OPEN_WEBUI_SUBDOMAIN}.${SWAG_DOMAIN}
       - ENABLE_PERSISTENT_CONFIG=False
       - ENABLE_FORWARD_USER_INFO_HEADERS=True
       - GLOBAL_LOG_LEVEL=INFO
