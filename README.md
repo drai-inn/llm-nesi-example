@@ -27,6 +27,8 @@ LITELLM_UI_PASSWORD=
 SWAG_DOMAIN=
 OPEN_WEBUI_URL=
 VLLM_API_KEY=
+FLOWISE_USERNAME=
+FLOWISE_PASSWORD=
 # virtual key created in the litellm ui manually:
 OPENAI_API_KEY=sk-
 ```

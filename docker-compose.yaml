@@ -15,7 +15,8 @@ services:
     volumes:
       - ./swag-data:/config
       - ./swag-proxy-configs/open-webui.subdomain.conf:/config/nginx/proxy-confs/open-webui.subdomain.conf:ro
-      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
+      - ./swag-proxy-configs/flowise.subdomain.conf:/config/nginx/proxy-confs/flowise.subdomain.conf:ro
+#      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
     ports:
       - 443:443
     restart: unless-stopped
@@ -52,7 +53,7 @@ services:
     restart: unless-stopped
 
   litellm:
-    image: litellm/litellm:v1.74.15-stable
+    image: litellm/litellm:v1.75.5-stable
     container_name: litellm
     ports:
       - "4000:4000"
@@ -75,7 +76,7 @@ services:
       - litellm-db
 
   litellm-db:
-    image: postgres:latest
+    image: postgres:17.4
     container_name: litellm-db
     restart: always
     environment:
@@ -89,3 +90,17 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+
+  flowise:
+    image: flowiseai/flowise:latest
+    container_name: flowise
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_PATH=/root/.flowise
+      - FLOWISE_USERNAME=${FLOWISE_USERNAME}
+      - FLOWISE_PASSWORD=${FLOWISE_PASSWORD}
+    volumes:
+      - ./flowise-data:/root/.flowise
