@@ -16,7 +16,7 @@ services:
       - ./swag-data:/config
       - ./swag-proxy-configs/open-webui.subdomain.conf:/config/nginx/proxy-confs/open-webui.subdomain.conf:ro
       - ./swag-proxy-configs/flowise.subdomain.conf:/config/nginx/proxy-confs/flowise.subdomain.conf:ro
-#      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
+      - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
     ports:
       - 443:443
     restart: unless-stopped
