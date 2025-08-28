@@ -95,7 +95,7 @@ and run with `sudo docker compose up`
 
 ## Running vllm
 
-Make a *env* file with
+Make a *.env* file with
 
 ```
 VLLM_API_KEY=mysecretkey
