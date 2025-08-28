@@ -1,0 +1,25 @@
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    container_name: vllm
+    runtime: nvidia
+    ipc: host
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    ports:
+      - "8080:8080"
+    command: >
+      --model openai/gpt-oss-20b
+      --host 0.0.0.0
+      --port 8080
+      --async-scheduling
+    environment:
+      - TZ=Pacific/Auckland
+      - VLLM_API_KEY=${VLLM_API_KEY}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

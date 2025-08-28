@@ -52,8 +52,20 @@ services:
       - PORTS=7000,7001,7002
     restart: unless-stopped
 
+  chris-gpu-proxy:
+    image: qoomon/docker-host
+    container_name: chris-gpu-proxy
+    cap_add:
+      - "NET_ADMIN"
+      - "NET_RAW"
+    mem_limit: 8M
+    environment:
+      - DOCKER_HOST=10.1.0.94
+      - PORTS=8080
+    restart: unless-stopped
+
   litellm:
-    image: litellm/litellm:v1.75.5-stable
+    image: litellm/litellm:v1.75.8-stable
     container_name: litellm
     ports:
       - "4000:4000"
