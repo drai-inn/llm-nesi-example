@@ -2,6 +2,8 @@
 
 ## Installation
 
+Running on RDC VM with Ubuntu 22.04 base.
+
 Update packages and reboot:
 
 ```
