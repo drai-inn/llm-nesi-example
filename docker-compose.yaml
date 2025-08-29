@@ -61,7 +61,7 @@ services:
     mem_limit: 8M
     environment:
       - DOCKER_HOST=10.1.0.94
-      - PORTS=8080
+      - PORTS=8000
     restart: unless-stopped
 
   litellm:

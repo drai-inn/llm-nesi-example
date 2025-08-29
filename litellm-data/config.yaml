@@ -10,8 +10,7 @@ model_list:
       api_key: os.environ/VLLM_API_KEY
       model: hosted_vllm/openai/gpt-oss-120b
     model_name: gpt-oss-120b
-  - litellm_params:
-      api_base: http://chris-gpu-proxy:8080/v1
-      api_key: os.environ/VLLM_API_KEY
-      model: hosted_vllm/openai/gpt-oss-20b
-    model_name: gpt-oss-20b
+  - model_name: triton-Qwen3-8B
+    litellm_params:
+      model: triton/Qwen3-8B"
+      api_base: http://chris-gpu-proxy:8000/generate
