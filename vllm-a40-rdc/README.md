@@ -2,6 +2,8 @@
 
 ## Installation
 
+Running on RDC VM with Ubuntu 22.04 base.
+
 Update packages and reboot:
 
 ```
@@ -93,7 +95,7 @@ and run with `sudo docker compose up`
 
 ## Running vllm
 
-Make a *env* file with
+Make a *.env* file with
 
 ```
 VLLM_API_KEY=mysecretkey
