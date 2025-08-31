@@ -1,0 +1,10 @@
+# prometheus.yaml
+global:
+  scrape_interval: 5s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: vllm-gpt-oss-120b
+    static_configs:
+      - targets:
+          - 'hostproxy:7002'

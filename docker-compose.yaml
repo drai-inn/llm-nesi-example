@@ -17,6 +17,7 @@ services:
       - ./swag-proxy-configs/open-webui.subdomain.conf:/config/nginx/proxy-confs/open-webui.subdomain.conf:ro
       - ./swag-proxy-configs/flowise.subdomain.conf:/config/nginx/proxy-confs/flowise.subdomain.conf:ro
       - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
+      - ./swag-proxy-configs/grafana.subdomain.conf:/config/nginx/proxy-confs/grafana.subdomain.conf:ro
     ports:
       - 443:443
     restart: unless-stopped
@@ -61,7 +62,7 @@ services:
     mem_limit: 8M
     environment:
       - DOCKER_HOST=10.1.0.94
-      - PORTS=8000
+      - PORTS=8000,8001,8002
     restart: unless-stopped
 
   litellm:
@@ -116,3 +117,30 @@ services:
       - FLOWISE_PASSWORD=${FLOWISE_PASSWORD}
     volumes:
       - ./flowise-data:/root/.flowise
+
+  triton-grpc-proxy:
+    build: ./triton-grpc-proxy
+    container_name: triton-grpc-proxy
+    restart: unless-stopped
+    environment:
+      - TRITON_URL=chris-gpu:8001
+    ports:
+      - "8005:8005"
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml # mount Prometheus config file
+      - ./prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:12.1
+    container_name: grafana
+    user: "1000:1000"
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    depends_on:
+      - prometheus
