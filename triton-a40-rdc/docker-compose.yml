@@ -1,0 +1,29 @@
+services:
+  tritonserver:
+    image: nvcr.io/nvidia/tritonserver:25.08-vllm-python-py3
+    container_name: tritonserver
+    runtime: nvidia
+    ipc: host
+    volumes:
+      - /mnt/triton-home:/home/triton-server
+      - ./model_repository:/models
+      - ./engine:/engine
+    user: "1000:1000"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    command: >
+      tritonserver
+      --model-repository
+      /models
+      --log-verbose=3
+    environment:
+      - TZ=Pacific/Auckland
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
