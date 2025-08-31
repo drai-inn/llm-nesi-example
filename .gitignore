@@ -3,3 +3,5 @@ litellm-db-data/
 open-webui-data/
 swag-data/
 flowise-data/
+grafana-data/
+prometheus-data/
