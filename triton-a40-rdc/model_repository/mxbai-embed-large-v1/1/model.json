@@ -1,0 +1,7 @@
+{
+    "model": "mixedbread-ai/mxbai-embed-large-v1",
+    "task": "embed",
+    "disable_log_requests": false,
+    "gpu_memory_utilization": 0.3,
+    "enforce_eager": true
+}
