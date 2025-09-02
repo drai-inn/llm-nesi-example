@@ -12,10 +12,11 @@ model_list:
       api_key: os.environ/VLLM_API_KEY
       model: hosted_vllm/openai/gpt-oss-120b
     model_name: gpt-oss-120b
-  - model_name: Qwen3-8B
+  - model_name: Qwen3-Coder-30B-A3B
     litellm_params:
-      model: triton/Qwen3-8B"
-      api_base: http://chris-gpu-proxy:8000/v2/models/Qwen3-8B/generate
+      model: triton/Qwen3-Coder-30B-A3B-Instruct-W4A16"
+      api_base: http://chris-gpu-proxy:8000/v2/models/Qwen3-Coder-30B-A3B-Instruct-W4A16/generate
+      drop_params: true
   - model_name: granite-embedding-english-r2
     litellm_params:
       model: openai/granite-embedding-english-r2"

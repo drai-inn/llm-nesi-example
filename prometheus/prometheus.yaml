@@ -7,4 +7,12 @@ scrape_configs:
   - job_name: vllm-gpt-oss-120b
     static_configs:
       - targets:
-          - 'hostproxy:7002'
+        - 'hostproxy:7002'
+  - job_name: triton
+    static_configs:
+      - targets:
+        - 'chris-gpu-proxy:8002'
+  - job_name: dcgm-exporter
+    static_configs:
+      - targets:
+        - 'chris-gpu-proxy:9400'
