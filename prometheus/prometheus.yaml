@@ -8,6 +8,10 @@ scrape_configs:
     static_configs:
       - targets:
         - 'hostproxy:7002'
+  - job_name: vllm-gpt-oss-20b
+    static_configs:
+      - targets:
+        - 'hostproxy:7001'
   - job_name: triton
     static_configs:
       - targets:
