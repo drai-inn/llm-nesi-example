@@ -11,8 +11,8 @@ scrape_configs:
   - job_name: triton
     static_configs:
       - targets:
-        - 'chris-gpu-proxy:8002'
+        - 'tritonserver:8002'
   - job_name: dcgm-exporter
     static_configs:
       - targets:
-        - 'chris-gpu-proxy:9400'
+        - 'dcgm-exporter:9400'
