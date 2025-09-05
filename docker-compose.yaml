@@ -53,18 +53,6 @@ services:
       - PORTS=7000,7001,7002
     restart: unless-stopped
 
-  chris-gpu-proxy:
-    image: qoomon/docker-host
-    container_name: chris-gpu-proxy
-    cap_add:
-      - "NET_ADMIN"
-      - "NET_RAW"
-    mem_limit: 8M
-    environment:
-      - DOCKER_HOST=10.1.0.94
-      - PORTS=8000,8001,8002,9400
-    restart: unless-stopped
-
   litellm:
     image: litellm/litellm:v1.75.8-stable
     container_name: litellm
@@ -118,14 +106,14 @@ services:
     volumes:
       - ./flowise-data:/root/.flowise
 
-  triton-grpc-proxy:
-    build: ./triton-grpc-proxy
-    container_name: triton-grpc-proxy
-    restart: unless-stopped
-    environment:
-      - TRITON_URL=chris-gpu:8001
-    ports:
-      - "8005:8005"
+#  triton-grpc-proxy:
+#    build: ./triton-grpc-proxy
+#    container_name: triton-grpc-proxy
+#    restart: unless-stopped
+#    environment:
+#      - TRITON_URL=chris-gpu:8001
+#    ports:
+#      - "8005:8005"
 
   prometheus:
     image: prom/prometheus:v3.5.0
@@ -144,3 +132,46 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
       - prometheus
+
+  tritonserver:
+    image: nvcr.io/nvidia/tritonserver:25.08-vllm-python-py3
+    container_name: tritonserver
+    runtime: nvidia
+    ipc: host
+    volumes:
+      - /mnt/triton-home:/home/triton-server
+      - ./model_repository:/models
+    user: "1000:1000"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    command: >
+      tritonserver
+      --model-repository
+      /models
+    environment:
+      - TZ=Pacific/Auckland
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  dcgm-exporter:
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:4.4.0-4.5.0-ubuntu22.04
+    container_name: dcgm-exporter
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    cap_add:
+      - SYS_ADMIN
+#    ports:
+#      - "9400:9400"
+    restart: unless-stopped
