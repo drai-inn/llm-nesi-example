@@ -33,7 +33,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 Install cuda driver https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html
 
 ```
-sudo apt-get install -y linux-headers-$(uname -r)
+sudo apt-get install -y linux-headers-generic
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 rm -f cuda-keyring_1.1-1_all.deb
