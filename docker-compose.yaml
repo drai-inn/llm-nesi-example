@@ -106,14 +106,12 @@ services:
     volumes:
       - ./flowise-data:/root/.flowise
 
-#  triton-grpc-proxy:
-#    build: ./triton-grpc-proxy
-#    container_name: triton-grpc-proxy
-#    restart: unless-stopped
-#    environment:
-#      - TRITON_URL=chris-gpu:8001
-#    ports:
-#      - "8005:8005"
+  triton-grpc-proxy:
+    build: ./triton-grpc-proxy
+    container_name: triton-grpc-proxy
+    restart: unless-stopped
+    ports:
+      - "8005:8005"
 
   prometheus:
     image: prom/prometheus:v3.5.0
