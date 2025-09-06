@@ -1,26 +1,18 @@
 general_settings:
   user_header_name: X-OpenWebUI-User-Id
-litellm_settings:
-  public_model_groups:
-    - gpt-oss-120b
 model_list:
-  - litellm_params:
-      api_base: http://hostproxy:7002/v1
-      api_key: os.environ/VLLM_API_KEY
-      model: hosted_vllm/openai/gpt-oss-120b
-    model_name: gpt-oss-120b
+#  - litellm_params:
+#      api_base: http://hostproxy:7002/v1
+#      api_key: os.environ/VLLM_API_KEY
+#      model: hosted_vllm/openai/gpt-oss-120b
+#    model_name: gpt-oss-120b
   - litellm_params:
       api_base: http://hostproxy:7001/v1
       api_key: os.environ/VLLM_API_KEY
       model: hosted_vllm/openai/gpt-oss-20b
     model_name: gpt-oss-20b
-  - model_name: Qwen3-14B
-    litellm_params:
-      model: triton/Qwen3-14B"
-      api_base: http://tritonserver:8000/v2/models/Qwen3-14B/generate
-      drop_params: true
-  - model_name: Qwen3-Embedding-0.6B
-    litellm_params:
-      model: openai/Qwen3-Embedding-0.6B"
-      api_base: http://triton-grpc-proxy:8005/v1
-      api_key: notneeded
+  - litellm_params:
+      api_base: http://vllm:8080/v1
+      api_key: os.environ/VLLM_API_KEY
+      model: hosted_vllm/Qwen/Qwen3-Embedding-8B
+    model_name: Qwen3-Embedding-8B

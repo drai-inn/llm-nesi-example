@@ -12,10 +12,10 @@ scrape_configs:
     static_configs:
       - targets:
         - 'hostproxy:7001'
-  - job_name: triton
+  - job_name: vllm-a40
     static_configs:
       - targets:
-        - 'tritonserver:8002'
+        - 'vllm:8080'
   - job_name: dcgm-exporter
     static_configs:
       - targets:
