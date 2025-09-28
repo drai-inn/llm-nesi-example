@@ -1,7 +1,7 @@
 # Example running an LLM on NeSI
 
 - LLM(s) running on NeSI HPC under Slurm using [vllm](https://github.com/vllm-project/vllm)
-- [LiteLLM proxy server](https://docs.litellm.ai/docs/simple_proxy) and [Open WebUI](https://docs.openwebui.com/) running on an RDC VM
+- [LiteLLM proxy server](https://docs.litellm.ai/docs/simple_proxy) and [Open WebUI](https://docs.openwebui.com/) running on a NeSI [Research Developer Cloud](https://support.cloud.nesi.org.nz/) Virtual Machine
 
 ## VM configuration
 
