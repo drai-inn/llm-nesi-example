@@ -50,7 +50,7 @@ services:
       - "NET_RAW"
     mem_limit: 8M
     environment:
-      - PORTS=7000,7001,7002
+      - PORTS=6000,7000,7001,7002,9401
     restart: unless-stopped
 
   litellm:
@@ -116,6 +116,10 @@ services:
   prometheus:
     image: prom/prometheus:v3.5.0
     container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=90d"
     volumes:
       - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml # mount Prometheus config file
       - ./prometheus-data:/prometheus
