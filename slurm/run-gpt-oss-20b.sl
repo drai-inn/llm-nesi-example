@@ -1,13 +1,13 @@
 #!/bin/bash -e
-#SBATCH --job-name=vllm-oss-120b
+#SBATCH --job-name=vllm-oss-20b
 #SBATCH --time=100:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=24G
-#SBATCH --gpus-per-node=H100
+#SBATCH --mem=16G
+#SBATCH --gpus-per-node=L4
 
-MODEL=openai/gpt-oss-120b
-EXTRA_ARGS="--async-scheduling --gpu-memory-utilization 0.92 --tool-call-parser openai --enable-auto-tool-choice"
+MODEL=openai/gpt-oss-20b
+EXTRA_ARGS="--async-scheduling --tool-call-parser openai --enable-auto-tool-choice"
 REMOTE_PORT=7002
 REMOTE_ADDRESS="ubuntu@1.2.3.4"
 SIF=/opt/nesi/containers/vllm/vllm-openai-v0.10.2.sif
