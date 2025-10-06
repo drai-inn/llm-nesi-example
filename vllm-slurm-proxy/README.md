@@ -2,7 +2,7 @@
 
 - tested with Ubuntu 22.04 VM (adjust instructions accordingly)
 - VM must allow incoming connections on ports 22 and 443
-- will expose the /v1 vLLM API endpoints
+- will expose the /v1 vLLM API endpoints, which will be protected by the API key you set in the Slurm script
 
 
 Prequisites:
