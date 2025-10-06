@@ -47,7 +47,9 @@ On the VM:
   git clone https://github.com/drai-inn/llm-nesi-example.git
   cd llm-nesi-example/vllm-slurm-proxy
   ```
-- edit the `.env` file and insert your duckdns domain and token
+- copy the env file and edit
+  - `cp .env.example .env`
+  - edit `.env` and insert your duckdns domain and token
 - start the services with `sudo docker compose up -d`
   - this can take some time the first time you run it as it has to pull the docker images
 
