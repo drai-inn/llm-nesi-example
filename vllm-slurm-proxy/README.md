@@ -41,7 +41,10 @@ On the VM:
   - find the line with `GatewayPorts` in it
   - uncomment and enable it: `GatewayPorts yes`
 - restart ssh service
-  `sudo systemctl restart ssh.service`
+  ```
+  sudo systemctl restart ssh.service
+  sudo systemctl restart sshd.service
+  ```
 - clone this repo and change to the vllm-slurm-proxy subdirectory
   ```
   git clone https://github.com/drai-inn/llm-nesi-example.git
@@ -49,13 +52,14 @@ On the VM:
   ```
 - copy the env file and edit
   - `cp .env.example .env`
-  - edit `.env` and insert your duckdns domain and token
+  - edit `.env` and insert your duckdns domain (without ".duckdns.org") and token
 - start the services with `sudo docker compose up -d`
   - this can take some time the first time you run it as it has to pull the docker images
 
 On NeSI:
 
 - create an SSH key pair if you don't already have one in ~/.ssh (e.g. `ssh-keygen`)
+  - if you don't choose one of the standard names (e.g. "id_rsa" for RSA keys) you'll need to modify the `ssh` commands throughout to add the `-i ~/.ssh/my_ssh_key` changing "my_ssh_key" to the name of the SSH key you created
 - copy the public key and then paste it into `~/.ssh/authorized_keys` **on the VM**
 - test SSH'ing to the VM `ssh ubuntu@<chosensubdomain>.duckdns.org` and make sure you can do it without a password
 - clone this repo and change to the slurm subdirectory
