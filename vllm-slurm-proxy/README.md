@@ -83,7 +83,6 @@ Test it is working on your local machine:
   - `export OPENAI_API_KEY=mysecretkey`
 - paste this code into a file (change "test-vllm-proxy" in the base_url to the duckdns subdomain your chose, and make sure the model matches the one you ran in the Slurm job)
   ```python
-  import os
   from openai import OpenAI
 
   client = OpenAI(
