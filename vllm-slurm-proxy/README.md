@@ -71,6 +71,31 @@ On NeSI:
   - etc
 - submit the slurm job
 
-Test it is working:
+Test it is working on your local machine:
 
-- TODO
+- install the openai python package, e.g. into a venv
+  ```
+  python -m venv venv
+  source venv/bin/activate
+  pip install openai
+  ```
+- set the api key that must match the one in the slurm job
+  - `export OPENAI_API_KEY=mysecretkey`
+- paste this code into a file (change "test-vllm-proxy" in the base_url to the duckdns subdomain your chose, and make sure the model matches the one you ran in the Slurm job)
+  ```python
+  import os
+  from openai import OpenAI
+
+  client = OpenAI(
+      base_url="https://vllm.test-vllm-proxy.duckdns.org/v1",
+  )
+
+  response = client.responses.create(
+      model="openai/gpt-oss-20b",
+      instructions="You are a coding assistant that talks like a pirate.",
+      input="How do I check if a Python object is an instance of a class?",
+  )
+
+  print(response.output_text)
+  ```
+- run the python script
