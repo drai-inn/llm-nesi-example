@@ -1,0 +1,56 @@
+services:
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Pacific/Auckland
+      - URL=${DUCKDNS_SUBDOMAIN}.duckdns.org
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - DNSPLUGIN=duckdns
+    volumes:
+      - ./swag-data:/config
+      - ./swag-proxy-configs/vllm.subdomain.conf:/config/nginx/proxy-confs/vllm.subdomain.conf:ro
+    ports:
+      - 443:443
+    restart: unless-stopped
+    depends_on:
+      swag-configure-duckdns:
+        condition: service_completed_successfully
+
+  hostproxy:
+    image: qoomon/docker-host
+    container_name: hostproxy
+    cap_add:
+      - "NET_ADMIN"
+      - "NET_RAW"
+    mem_limit: 8M
+    environment:
+      - PORTS=7002
+    restart: unless-stopped
+
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Pacific/Auckland
+      - SUBDOMAINS=${DUCKDNS_SUBDOMAIN}
+      - TOKEN=${DUCKDNS_TOKEN}
+      - UPDATE_IP=ipv4
+      - LOG_FILE=false
+    restart: unless-stopped
+
+  swag-configure-duckdns:
+    image: alpine:latest
+    container_name: swag-configure-duckdns
+    entrypoint: >
+      /bin/sh -c 'mkdir -p /config/dns-conf && echo "dns_duckdns_token=${DUCKDNS_TOKEN}" > /config/dns-conf/duckdns.ini'
+    restart: "no"
+    volumes:
+      - ./swag-data:/config
