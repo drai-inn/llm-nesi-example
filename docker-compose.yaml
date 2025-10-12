@@ -18,6 +18,7 @@ services:
       - ./swag-proxy-configs/flowise.subdomain.conf:/config/nginx/proxy-confs/flowise.subdomain.conf:ro
       - ./swag-proxy-configs/litellm.subdomain.conf:/config/nginx/proxy-confs/litellm.subdomain.conf:ro
       - ./swag-proxy-configs/grafana.subdomain.conf:/config/nginx/proxy-confs/grafana.subdomain.conf:ro
+      - ./swag-proxy-configs/mlflow.subdomain.conf:/config/nginx/proxy-confs/mlflow.subdomain.conf:ro
     ports:
       - 443:443
     restart: unless-stopped
@@ -50,7 +51,7 @@ services:
       - "NET_RAW"
     mem_limit: 8M
     environment:
-      - PORTS=6000,7000,7001,7002,9401
+      - PORTS=6000,7000,7001,7002,9401,7400,7900
     restart: unless-stopped
 
   litellm:
@@ -65,7 +66,7 @@ services:
       - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
       - UI_USERNAME=admin
       - UI_PASSWORD=${LITELLM_UI_PASSWORD}
-      - STORE_MODELS_IN_DB=True
+      - STORE_MODEL_IN_DB=True
       - HOST=0.0.0.0
       - PORT=4000
       - VLLM_API_KEY=${VLLM_API_KEY}
@@ -127,3 +128,23 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
       - prometheus
+
+  # TODO: separate out to postgres and object storage
+  mlflow:
+    build: ./mlflow
+    container_name: mlflow
+    restart: unless-stopped
+    environment:
+      - MLFLOW_FLASK_SERVER_SECRET_KEY=${MLFLOW_FLASK_SERVER_SECRET_KEY}
+      - TZ=Pacific/Auckland
+      - OIDC_DISCOVERY_URL=${MLFLOW_OIDC_DISCOVERY_URL}
+      - OIDC_CLIENT_ID=${MLFLOW_OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${MLFLOW_OIDC_CLIENT_SECRET}
+      - OIDC_PROVIDER_DISPLAY_NAME=${MLFLOW_OIDC_PROVIDER_DISPLAY_NAME}
+      - OIDC_REDIRECT_URI=${MLFLOW_OIDC_REDIRECT_URI}
+      - OIDC_SCOPE=openid email profile
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./mlflow-data:/app
+    ports:
+      - "5000:5000"
