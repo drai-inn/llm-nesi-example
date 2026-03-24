@@ -6,3 +6,4 @@ flowise-data/
 grafana-data/
 prometheus-data/
 mlflow-data/
+litellm-data/config.yaml

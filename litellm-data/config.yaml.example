@@ -1,0 +1,34 @@
+general_settings:
+  user_header_name: X-OpenWebUI-User-Id
+litellm_settings:
+  public_model_groups:
+  - gpt-oss-120b
+  - gpt-oss-20b
+  - Qwen3-235B-A22B
+  - Qwen3-Coder-480B-A35B-Instruct
+model_list:
+- litellm_params:
+    api_base: http://hostproxy:7002/v1
+    api_key: hidden
+    model: hosted_vllm/openai/gpt-oss-120b
+  model_name: gpt-oss-120b
+- litellm_params:
+    api_base: http://hostproxy:7001/v1
+    api_key: hidden
+    model: hosted_vllm/openai/gpt-oss-20b
+  model_name: gpt-oss-20b
+- litellm_params:
+    api_base: http://vllm:8080/v1
+    api_key: hidden
+    model: hosted_vllm/Qwen/Qwen3-Embedding-8B
+  model_name: Qwen3-Embedding-8B
+- litellm_params:
+    api_base: http://hostproxy:6000/v1
+    api_key: hidden
+    model: hosted_vllm/Qwen/Qwen3-235B-A22B
+  model_name: Qwen3-235B-A22B
+- litellm_params:
+    api_base: http://hostproxy:6000/v1
+    api_key: hidden
+    model: hosted_vllm/Qwen/Qwen3-Coder-480B-A35B-Instruct
+  model_name: Qwen3-Coder-480B-A35B-Instruct
